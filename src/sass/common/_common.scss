@@ -1,0 +1,11 @@
+// Variables
+@import 'variables/variables';
+
+// Normalize (from webpack)
+@import 'normalize.scss';
+
+// Fonts
+@import 'fonts/roboto/roboto';
+
+// General styles for the app
+@import 'styles/commonStyles';

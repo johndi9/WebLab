@@ -1,0 +1,14 @@
+.videoWrapper {
+  position: absolute;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background: #4f7aa6;
+  video {
+    opacity: 0.4;
+    width: 100%;
+    min-height: 100%!important;
+    overflow: hidden;
+    z-index: -1;
+  }
+}

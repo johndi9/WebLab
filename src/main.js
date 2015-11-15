@@ -1,15 +1,17 @@
-import React    from 'react';
-import ReactDOM from 'react-dom';
-import styles   from './main.scss';
-import Logo     from './components/Logo/Logo.jsx';
-import Message  from './components/Message/Message.jsx';
+import React        from 'react';
+import ReactDOM     from 'react-dom';
+import styles       from './main.scss';
+import VideoWrapper from './components/VideoWrapper/VideoWrapper.jsx';
+import VideoText    from './components/VideoText/VideoText.jsx';
 
 class Main extends React.Component {
   render() {
-    return (<div>
-              <Logo/>
-              <Message/>
-            </div>);
+    return (
+      <div>
+        <VideoWrapper/>
+        <VideoText/>
+      </div>
+    );
   }
 }
 

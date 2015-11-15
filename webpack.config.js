@@ -6,21 +6,25 @@ const cssnext           = require('cssnext');
 const postcssEasings    = require('postcss-easings');
 const autoprefixer      = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const bemLinter         = require('postcss-bem-linter');
 
 const nodeModulesPath   = path.resolve(__dirname, 'node_modules');
 const normalizeScssPath = path.resolve(nodeModulesPath, 'normalize.scss');
+const robotoScssPath    = path.resolve(nodeModulesPath, 'roboto-fontface', 'css');
 const buildPath         = path.resolve(__dirname, 'public', 'build');
 const mainPath          = path.resolve(__dirname, 'src', 'main.js');
 const htmlTemplate      = path.resolve(__dirname, 'src', 'index.html');
 const reactPath         = path.resolve(nodeModulesPath, 'react', 'dist');
 
 const autoprefixerBrowsers = ['Android 2.3', 'Android >= 4', 'Chrome >= 20', 'Firefox >= 24', 'Explorer >= 9', 'iOS >= 6', 'Opera >= 12', 'Safari >= 6'];
-const sassLoaders = [
+const cssLoaders = [
   'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
   'postcss-loader',
-  'cssnext-loader',
-  'sass-loader?outputStyle=expanded&includePaths[]=' + encodeURIComponent(normalizeScssPath)
+  'resolve-url-loader'
 ];
+const sassLoaders = cssLoaders.concat([
+  'sass-loader?outputStyle=expanded'
+]);
 
 const config = {
   // Makes sure errors in console map to the correct file
@@ -60,18 +64,19 @@ const config = {
       {test: /\.gif$/, loader: 'url?limit=10000&mimetype=image/gif'},
       {test: /\.jpg$/, loader: 'url?limit=10000&mimetype=image/jpg'},
       {test: /\.png$/, loader: 'url?limit=10000&mimetype=image/png'},
-      {test: /\.woff$/, loader: 'url?limit=10000&mimetype=application/font-woff'},
-      {test: /\.woff2$/, loader: 'url?limit=10000&mimetype=application/font-woff2'},
-      {test: /\.ttf$/, loader: 'file?mimetype=application/vnd.ms-fontobject'},
-      {test: /\.eot$/, loader: 'file?mimetype=application/x-font-ttf'},
-      {test: /\.svg$/, loader: 'file?mimetype=image/svg+xml'},
+      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff"},
+      {test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader"},
       {test: /\.jsx?$/, loaders: ['react-hot', 'jsx-loader?harmony', 'babel-loader'], exclude: [nodeModulesPath]},
       {test: /\.js$/, loaders: ['babel-loader'], exclude: [nodeModulesPath]},
       {test: /\.scss$/, loader: ExtractTextPlugin.extract('style-loader', sassLoaders.join('!'))},
+      {test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', cssLoaders.join('!'))},
     ]
   },
+  sassLoader: {
+    includePaths: [normalizeScssPath, robotoScssPath]
+  },
   postcss: [
-    autoprefixer({browsers: autoprefixerBrowsers}), postcssEasings, cssnext
+    autoprefixer({browsers: autoprefixerBrowsers}), postcssEasings, cssnext, bemLinter
   ],
   eslint: {
     configFile: '.eslintrc'
